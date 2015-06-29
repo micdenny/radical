@@ -23,10 +23,13 @@ using System.Runtime.CompilerServices;
 [assembly: CLSCompliant( true )]
 
 //This is the real build number used for references
-[assembly: AssemblyVersion( "1.5.2.1" )]
+[assembly: AssemblyVersion( "1.0.0.0" )]
 
 //This build number should always be equal to the one used in AssemblyVersion, currently is not used.
-[assembly: AssemblyFileVersion( "1.5.2.1" )]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+//This is the build number used to publish the NuGet package.
+[assembly: AssemblyInformationalVersion("1.0.0.0")]
 
 [assembly: NeutralResourcesLanguage( "en-US", UltimateResourceFallbackLocation.MainAssembly )]
 
