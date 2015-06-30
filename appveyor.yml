@@ -1,7 +1,6 @@
-
 # configuration for "master" branch
 # build in Release mode and deploy to NuGet.org
-- version: 1.5.2.{build}
+- version: 1.5.2
   branches:
     only:
     - deploy
@@ -30,9 +29,10 @@
     name: MyGet Private Radical (micdenny)
     on:
       branch: deploy
+
 # configuration for "development" branch
 # build in Debug mode and deploy to MyGet.org as pre-release
-- version: 1.5.2.{build}-alpha1
+- version: 1.5.2-alpha1-{build}
   branches:
     only:
     - deploy-development
