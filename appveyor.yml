@@ -36,7 +36,7 @@
   branches:
     only:
     - deploy-development
-  configuration: Release
+  configuration: Debug
   platform: Any CPU
   assembly_info:
     patch: true
@@ -45,22 +45,17 @@
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
   before_build:
-  - echo %APPVEYOR_BUILD_VERSION%
-  - echo %CONFIGURATION%
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
   after_build:
-  - echo %APPVEYOR_BUILD_VERSION%
-  - echo %CONFIGURATION%
   - md "src\build\nuget"
   - nuget pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
   - path: src\build\nuget\*.nupkg
-  - path: src
   deploy:
   - provider: Environment
     name: MyGet Private Radical (micdenny)
