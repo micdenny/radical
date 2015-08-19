@@ -1,6 +1,6 @@
 # configuration for "master" branch
 # build in Release mode and deploy to NuGet.org
-- version: 1.7.1
+- version: 1.7.1+{build}
   branches:
     only:
     - deploy
@@ -32,15 +32,27 @@
 
 # configuration for "development" branch
 # build in Debug mode and deploy to MyGet.org as pre-release
-- version: 1.7.1-alpha1
+- version: 1.7.1-alpha1+{build}
   init:
   - ps: |
-      $AssemblyVersion = "$Env:APPVEYOR_BUILD_VERSION"
-      $AppveyorVersion = "$Env:APPVEYOR_BUILD_VERSION+$Env:APPVEYOR_BUILD_NUMBER"
-      Set-AppveyorBuildVariable -Name "assembly_version" -Value "$AssemblyVersion"
-      Update-AppveyorBuild -Version "$AppveyorVersion"
-      Write-Host "Assembly Version: $AssemblyVersion"
-      Write-Host "AppVeyor Version: $AppveyorVersion"
+      "$Env:APPVEYOR_BUILD_VERSION" -match "(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))?"
+      $major = $matches['major'] -as [int]
+      $minor = $matches['minor'] -as [int]
+      $patch = $matches['patch'] -as [int]
+      $prerelease = $matches['prerelease']
+      $build = $matches['build'] -as [int]
+      if ($prerelease) {
+        $version = "$major.$minor.$patch-$prerelease"
+      } else {
+        $version = "$major.$minor.$patch"
+      }
+      Set-AppveyorBuildVariable -Name "assembly_major" -Value "$major"
+      Set-AppveyorBuildVariable -Name "assembly_minor" -Value "$minor"
+      Set-AppveyorBuildVariable -Name "assembly_patch" -Value "$patch"
+      Set-AppveyorBuildVariable -Name "assembly_prerelease" -Value "$prerelease"
+      Set-AppveyorBuildVariable -Name "assembly_build" -Value "$build"
+      Set-AppveyorBuildVariable -Name "assembly_version" -Value "$version"
+      Write-Host "Assembly Version: $version"
   branches:
     only:
     - deploy-development
