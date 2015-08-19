@@ -91,7 +91,7 @@
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - nuget pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - nuget pack "src\nuget\Radical.nuspec" -Version "%assembly_version%-%assembly_build%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
