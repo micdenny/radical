@@ -1,0 +1,63 @@
+# configuration for "master" branch
+# build in Release mode and deploy to NuGet.org
+- version: 1.5.{build}
+  branches:
+    only:
+    - deploy
+  configuration: Release
+  platform: Any CPU
+  assembly_info:
+    patch: true
+    file: '**\AssemblyInfo.*'
+    assembly_version: '{version}'
+    assembly_file_version: '{version}'
+    assembly_informational_version: '{version}'
+  before_build:
+  - tools\nuget.exe restore "src\Radical.sln"
+  build:
+    project: src\Radical.sln
+    verbosity: minimal
+  after_build:
+  - md "src\build\nuget"
+  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  test: off
+  artifacts:
+  - path: src\build\Release
+  - path: src\build\nuget\*.nupkg
+  deploy:
+  - provider: Environment
+    name: MyGet Private Radical (micdenny)
+    on:
+      branch: deploy
+
+# configuration for "development" branch
+# build in Debug mode and deploy to MyGet.org as pre-release
+- version: 1.5.{build}-alpha1
+  branches:
+    only:
+    - deploy-development
+  configuration: Debug
+  platform: Any CPU
+  assembly_info:
+    patch: true
+    file: '**\AssemblyInfo.*'
+    assembly_version: '{version}'
+    assembly_file_version: '{version}'
+    assembly_informational_version: '{version}'
+  before_build:
+  - tools\nuget.exe restore "src\Radical.sln"
+  build:
+    project: src\Radical.sln
+    verbosity: minimal
+  after_build:
+  - md "src\build\nuget"
+  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  test: off
+  artifacts:
+  - path: src\build\Release
+  - path: src\build\nuget\*.nupkg
+  deploy:
+  - provider: Environment
+    name: MyGet Private Radical (micdenny)
+    on:
+      branch: deploy-development

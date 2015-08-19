@@ -777,9 +777,6 @@
     <Compile Include="..\..\net35\Radical\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\net35\Radical\Properties\NugetInfo.cs">
-      <Link>Properties\NugetInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\net35\Radical\Resources\Exceptions.Designer.cs">
       <Link>Resources\Exceptions.Designer.cs</Link>
       <DependentUpon>Exceptions.resx</DependentUpon>

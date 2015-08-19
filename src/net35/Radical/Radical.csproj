@@ -149,7 +149,6 @@
       <DependentUpon>EntityCollection.%28Generic%29.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Entity\PropertyMetadata %28Generic%29.cs" />
-    <Compile Include="Properties\NugetInfo.cs" />
     <Compile Include="Threading\AsyncWorker\AsyncErrorEventArgs.cs" />
     <Compile Include="Threading\AsyncWorker\IWorkerStatus.cs" />
     <Compile Include="Threading\AsyncWorker\IExecutableWorker.cs" />
