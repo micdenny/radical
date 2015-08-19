@@ -13,13 +13,13 @@
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
   before_build:
-  - nuget restore "src\Radical.sln"
+  - tools\nuget.exe restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - nuget pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
@@ -45,14 +45,13 @@
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
   before_build:
-  - nuget help
-  - nuget restore "src\Radical.sln"
+  - tools\nuget.exe restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - nuget pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
