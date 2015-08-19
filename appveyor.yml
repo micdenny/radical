@@ -1,25 +1,58 @@
 # configuration for "master" branch
 # build in Release mode and deploy to NuGet.org
-- version: 1.5.{build}
+- version: 1.8.0+{build}
   branches:
     only:
     - deploy
+  init:
+  - ps: |
+      $checkVersion = "$Env:APPVEYOR_BUILD_VERSION" -match "(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))?"
+      $major = $matches['major'] -as [int]
+      $minor = $matches['minor'] -as [int]
+      $patch = $matches['patch'] -as [int]
+      $prerelease = $matches['prerelease']
+      $build = $matches['build'] -as [int]
+      
+      $assemblyVersion = "$major.$minor.$patch.0"
+      $assemblyFileVersion = "$major.$minor.$patch.$build"
+      $assemblyInformationalVersion = "$Env:APPVEYOR_BUILD_VERSION"
+      if ($prerelease) {
+        $packageVersion = "$major.$minor.$patch-$prerelease"
+      } else {
+        $packageVersion = "$major.$minor.$patch"
+      }
+      
+      Set-AppveyorBuildVariable -Name "assembly_major" -Value "$major"
+      Set-AppveyorBuildVariable -Name "assembly_minor" -Value "$minor"
+      Set-AppveyorBuildVariable -Name "assembly_patch" -Value "$patch"
+      Set-AppveyorBuildVariable -Name "assembly_prerelease" -Value "$prerelease"
+      Set-AppveyorBuildVariable -Name "assembly_build" -Value "$build"
+      
+      Set-AppveyorBuildVariable -Name "assembly_version" -Value "$assemblyVersion"
+      Set-AppveyorBuildVariable -Name "assembly_file_version" -Value "$assemblyFileVersion"
+      Set-AppveyorBuildVariable -Name "assembly_informational_version" -Value "$assemblyInformationalVersion"
+      Set-AppveyorBuildVariable -Name "package_version" -Value "$packageVersion"
+      
+      Write-Host "Assembly Version: $assemblyVersion"
+      Write-Host "Assembly File Version: $assemblyFileVersion"
+      Write-Host "Assembly Informational Version: $assemblyInformationalVersion"
+      Write-Host "Package Version: $packageVersion"
   configuration: Release
   platform: Any CPU
   assembly_info:
     patch: true
     file: '**\AssemblyInfo.*'
-    assembly_version: '{version}'
-    assembly_file_version: '{version}'
-    assembly_informational_version: '{version}'
+    assembly_version: '$(assembly_version)'
+    assembly_file_version: '$(assembly_file_version)'
+    assembly_informational_version: '$(assembly_informational_version)'
   before_build:
-  - tools\nuget.exe restore "src\Radical.sln"
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - nuget pack "src\nuget\Radical.nuspec" -Version "%package_version%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
@@ -32,26 +65,59 @@
 
 # configuration for "development" branch
 # build in Debug mode and deploy to MyGet.org as pre-release
-- version: 1.5.{build}-alpha1
+- version: 1.8.0-alpha1+{build}
   branches:
     only:
     - deploy-development
+  init:
+  - ps: |
+      $checkVersion = "$Env:APPVEYOR_BUILD_VERSION" -match "(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))?"
+      $major = $matches['major'] -as [int]
+      $minor = $matches['minor'] -as [int]
+      $patch = $matches['patch'] -as [int]
+      $prerelease = $matches['prerelease']
+      $build = $matches['build'] -as [int]
+      
+      $assemblyVersion = "$major.$minor.$patch.0"
+      $assemblyFileVersion = "$major.$minor.$patch.$build"
+      $assemblyInformationalVersion = "$Env:APPVEYOR_BUILD_VERSION"
+      if ($prerelease) {
+        $packageVersion = "$major.$minor.$patch-$prerelease"
+      } else {
+        $packageVersion = "$major.$minor.$patch"
+      }
+      
+      Set-AppveyorBuildVariable -Name "assembly_major" -Value "$major"
+      Set-AppveyorBuildVariable -Name "assembly_minor" -Value "$minor"
+      Set-AppveyorBuildVariable -Name "assembly_patch" -Value "$patch"
+      Set-AppveyorBuildVariable -Name "assembly_prerelease" -Value "$prerelease"
+      Set-AppveyorBuildVariable -Name "assembly_build" -Value "$build"
+      
+      Set-AppveyorBuildVariable -Name "assembly_version" -Value "$assemblyVersion"
+      Set-AppveyorBuildVariable -Name "assembly_file_version" -Value "$assemblyFileVersion"
+      Set-AppveyorBuildVariable -Name "assembly_informational_version" -Value "$assemblyInformationalVersion"
+      Set-AppveyorBuildVariable -Name "package_version" -Value "$packageVersion"
+      
+      Write-Host "Assembly Version: $assemblyVersion"
+      Write-Host "Assembly File Version: $assemblyFileVersion"
+      Write-Host "Assembly Informational Version: $assemblyInformationalVersion"
+      Write-Host "Package Version: $packageVersion"
   configuration: Debug
   platform: Any CPU
   assembly_info:
     patch: true
     file: '**\AssemblyInfo.*'
-    assembly_version: '{version}'
-    assembly_file_version: '{version}'
-    assembly_informational_version: '{version}'
+    assembly_version: '$(assembly_version)'
+    assembly_file_version: '$(assembly_file_version)'
+    assembly_informational_version: '$(assembly_informational_version)'
   before_build:
-  - tools\nuget.exe restore "src\Radical.sln"
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - tools\nuget.exe pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - nuget pack "src\nuget\Radical.nuspec" -Version "%package_version%-%assembly_build%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
