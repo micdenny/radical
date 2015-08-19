@@ -13,7 +13,7 @@
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
   before_build:
-  - src\nuget.exe restore "src\Radical.sln"
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
@@ -45,7 +45,8 @@
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
   before_build:
-  - src\nuget.exe restore "src\Radical.sln"
+  - nuget help
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
