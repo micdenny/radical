@@ -35,8 +35,12 @@
 - version: 1.7.1-alpha1
   init:
     - ps: |
-        Set-AppveyorBuildVariable -Name "assembly_version" -Value "$Env:APPVEYOR_BUILD_VERSION"
-        Update-AppveyorBuild -Version "$Env:APPVEYOR_BUILD_VERSION+$Env:APPVEYOR_BUILD_NUMBER"
+        $AssemblyVersion = "$Env:APPVEYOR_BUILD_VERSION"
+        $AppveyorVersion = "$Env:APPVEYOR_BUILD_VERSION+$Env:APPVEYOR_BUILD_NUMBER"
+        Set-AppveyorBuildVariable -Name "assembly_version" -Value "$AssemblyVersion"
+        Update-AppveyorBuild -Version "$AppveyorVersion"
+        Add-AppveyorMessage -Message "Assembly Version: $AssemblyVersion"
+        Add-AppveyorMessage -Message "AppVeyor Version: $AppveyorVersion"
   branches:
     only:
     - deploy-development
