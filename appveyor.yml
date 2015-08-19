@@ -1,6 +1,6 @@
 # configuration for "master" branch
 # build in Release mode and deploy to NuGet.org
-- version: 1.7.{build}
+- version: 1.7.1
   branches:
     only:
     - deploy
@@ -32,7 +32,11 @@
 
 # configuration for "development" branch
 # build in Debug mode and deploy to MyGet.org as pre-release
-- version: 1.7.{build}-alpha1
+- version: 1.7.1-alpha1
+  init:
+    - ps: |
+        Set-AppveyorBuildVariable -Name "assembly_version" -Value "$Env:APPVEYOR_BUILD_VERSION"
+        Update-AppveyorBuild -Version "$Env:APPVEYOR_BUILD_VERSION+$Env:APPVEYOR_BUILD_NUMBER"
   branches:
     only:
     - deploy-development
@@ -41,9 +45,9 @@
   assembly_info:
     patch: true
     file: '**\AssemblyInfo.*'
-    assembly_version: '{version}'
-    assembly_file_version: '{version}'
-    assembly_informational_version: '{version}'
+    assembly_version: '$(assembly_version)'
+    assembly_file_version: '$(assembly_version)'
+    assembly_informational_version: '$(assembly_version)'
   before_build:
   - nuget restore "src\Radical.sln"
   build:
@@ -51,7 +55,7 @@
     verbosity: minimal
   after_build:
   - md "src\build\nuget"
-  - nuget pack "src\nuget\Radical.nuspec" -Version "%APPVEYOR_BUILD_VERSION%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
+  - nuget pack "src\nuget\Radical.nuspec" -Version "%assembly_version%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
   test: off
   artifacts:
   - path: src\build\Release
