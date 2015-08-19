@@ -34,7 +34,7 @@
 # build in Debug mode and deploy to MyGet.org as pre-release
 - version: 1.7.1-alpha1
   init:
-  - ps: >-
+  - ps: |
       $AssemblyVersion = "$Env:APPVEYOR_BUILD_VERSION"
       $AppveyorVersion = "$Env:APPVEYOR_BUILD_VERSION+$Env:APPVEYOR_BUILD_NUMBER"
       Set-AppveyorBuildVariable -Name "assembly_version" -Value "$AssemblyVersion"
