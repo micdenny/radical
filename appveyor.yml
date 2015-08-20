@@ -63,6 +63,7 @@
     categories:
       except:
       - ObjectDumper
+      - AsyncWorker
   artifacts:
   - path: src\build\Debug
   - path: src\build\nuget\*.nupkg
