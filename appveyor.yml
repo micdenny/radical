@@ -15,7 +15,7 @@
     assembly_file_version: '$(assembly_file_version)'
     assembly_informational_version: '$(assembly_informational_version)'
   before_build:
-  - nuget restore "src\Radical.sln"'
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
@@ -51,7 +51,7 @@
   before_build:
   - where nuget
   - nuget help
-  - nuget restore "src\Radical.sln"'
+  - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
     verbosity: minimal
