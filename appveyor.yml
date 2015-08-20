@@ -6,6 +6,8 @@
     - deploy
   configuration: Release
   platform: Any CPU
+  cache:
+  - src\packages -> src\**\packages.config
   install:
   - ps: .\appveyor-buildversion.ps1
   assembly_info:
@@ -43,6 +45,8 @@
     - deploy-development
   configuration: Debug
   platform: Any CPU
+  cache:
+  - src\packages -> src\**\packages.config
   install:
   - ps: .\appveyor-buildversion.ps1
   assembly_info:
