@@ -51,6 +51,7 @@
   before_build:
   - where nuget
   - nuget help
+  - nuget sources
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
