@@ -6,6 +6,8 @@
     - deploy
   configuration: Release
   platform: Any CPU
+  install:
+  - ps: .\appveyor-buildversion.ps1
   assembly_info:
     patch: true
     file: '**\AssemblyInfo.*'
@@ -13,7 +15,6 @@
     assembly_file_version: '$(assembly_file_version)'
     assembly_informational_version: '$(assembly_informational_version)'
   before_build:
-  - ps: .\appveyor-beforebuild.ps1
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
@@ -39,6 +40,8 @@
     - deploy-development
   configuration: Debug
   platform: Any CPU
+  install:
+  - ps: .\appveyor-buildversion.ps1
   assembly_info:
     patch: true
     file: '**\AssemblyInfo.*'
@@ -46,7 +49,6 @@
     assembly_file_version: '$(assembly_file_version)'
     assembly_informational_version: '$(assembly_informational_version)'
   before_build:
-  - ps: .\appveyor-beforebuild.ps1
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
