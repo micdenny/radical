@@ -22,7 +22,6 @@
   after_build:
   - md "src\build\nuget"
   - nuget pack "src\nuget\Radical.nuspec" -Version "%package_version%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
-  test: off
   artifacts:
   - path: src\build\Release
   - path: src\build\nuget\*.nupkg
@@ -56,7 +55,6 @@
   after_build:
   - md "src\build\nuget"
   - nuget pack "src\nuget\Radical.nuspec" -Version "%package_version%-%assembly_build%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
-  test: off
   artifacts:
   - path: src\build\Debug
   - path: src\build\nuget\*.nupkg
