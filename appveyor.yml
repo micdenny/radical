@@ -5,7 +5,7 @@
     only:
     - deploy
   init:
-  - ps: .\appveyor-init.ps1
+  - cmd: powershell appveyor-init.ps1
   configuration: Release
   platform: Any CPU
   assembly_info:
@@ -39,7 +39,7 @@
     only:
     - deploy-development
   init:
-  - ps: .\appveyor-init.ps1
+  - cmd: powershell appveyor-init.ps1
   configuration: Debug
   platform: Any CPU
   assembly_info:
