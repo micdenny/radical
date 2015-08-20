@@ -4,8 +4,6 @@
   branches:
     only:
     - deploy
-  init:
-  - cmd: powershell appveyor-init.ps1
   configuration: Release
   platform: Any CPU
   assembly_info:
@@ -15,6 +13,7 @@
     assembly_file_version: '$(assembly_file_version)'
     assembly_informational_version: '$(assembly_informational_version)'
   before_build:
+  - ps: .\appveyor-beforebuild.ps1
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
@@ -38,8 +37,6 @@
   branches:
     only:
     - deploy-development
-  init:
-  - cmd: powershell appveyor-init.ps1
   configuration: Debug
   platform: Any CPU
   assembly_info:
@@ -49,6 +46,7 @@
     assembly_file_version: '$(assembly_file_version)'
     assembly_informational_version: '$(assembly_informational_version)'
   before_build:
+  - ps: .\appveyor-beforebuild.ps1
   - nuget restore "src\Radical.sln"
   build:
     project: src\Radical.sln
