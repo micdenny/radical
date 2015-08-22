@@ -1,6 +1,7 @@
-$checkVersion = "$Env:APPVEYOR_BUILD_VERSION" -match "^(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))?$"
+$checkVersion = "$Env:APPVEYOR_BUILD_VERSION" -match "^(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))$"
 if (!$checkVersion) {
 	Write-Error "The version number specified is not valid. You must enter a valid semantic version (2.0): Major.Minor.Patch-PreRelease+Build (e.g.: 1.5.2-Alpha1-{build}). Pre-release and build number as optional."
+	$host.SetShouldExit(666)
 }
 
 $major = $matches['major'] -as [int]
@@ -11,11 +12,12 @@ $build = $matches['build'] -as [int]
       
 $assemblyVersion = "$major.$minor.$patch.0"
 $assemblyFileVersion = "$major.$minor.$patch.$build"
-$assemblyInformationalVersion = "$Env:APPVEYOR_BUILD_VERSION"
 if ($prerelease) {
-$packageVersion = "$major.$minor.$patch-$prerelease"
+	$assemblyInformationalVersion = "$major.$minor.$patch-$prerelease+$build"
+	$packageVersion = "$major.$minor.$patch-$prerelease"
 } else {
-$packageVersion = "$major.$minor.$patch"
+	$assemblyInformationalVersion = "$major.$minor.$patch+$build"
+	$packageVersion = "$major.$minor.$patch"
 }
       
 Set-AppveyorBuildVariable -Name "assembly_major" -Value "$major"
