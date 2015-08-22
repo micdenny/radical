@@ -1,7 +1,8 @@
 $checkVersion = "$Env:APPVEYOR_BUILD_VERSION" -match "^(?<major>[0-9]+)\.(?<minor>[0-9])+\.(?<patch>([0-9]+))(-(?<prerelease>[a-zA-Z0-9]+))?(\+(?<build>([0-9]+)))$"
 if (!$checkVersion) {
-	Write-Error "The version number specified is not valid. You must enter a valid semantic version (2.0): Major.Minor.Patch-PreRelease+Build (e.g.: 1.5.2-Alpha1-{build}). Pre-release and build number as optional."
+	throw "The version number specified is not valid. You must enter a valid semantic version (2.0): Major.Minor.Patch-PreRelease+Build (e.g.: 1.5.2-Alpha1-{build}). Pre-release and build number as optional." -Category InvalidArgument
 	$host.SetShouldExit(666)
+	exit
 }
 
 $major = $matches['major'] -as [int]
